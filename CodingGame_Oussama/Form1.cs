@@ -1,16 +1,9 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Data;
-using System.Drawing;
-using System.Globalization;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
-using System.Linq;
-using System.Runtime;
-using System.Security.Cryptography.X509Certificates;
 
 namespace CodingGame_Oussama
 {
@@ -23,12 +16,25 @@ namespace CodingGame_Oussama
 
         private void Form1_Load(object sender, EventArgs e)
         {
-            CodingGame();
+            //CodingGame();
+            var revision = new Revision();
+            revision.CodingGame();
+
         }
 
         private void CodingGame()
         {
-            //Question();
+            var res = 01 | 11;
+
+
+            var hs = new HashSet<int>();
+            hs.Add(1);
+            hs.Add(1);
+            hs.Add(2);
+
+            var c = hs.Count;
+
+            Question();
             //Question12();
             //Question_13();
             //Question_15();
@@ -39,7 +45,171 @@ namespace CodingGame_Oussama
 
             //var next = Question_19();
             //Question_20();
-            Question_21();
+            //Question_21();
+
+            //Question_8_25();
+            //Question_22_25();
+            ////Question_24_25(); //isTwin
+            //Question_25_25();
+
+
+
+
+        }
+
+        private void Question_25_25()
+        {
+            bool result1 = Check("[()]"); //true
+            bool result2 = Check("(())[]"); //true
+            bool result3 = Check("[([))]"); //false
+            bool result4 = Check("(("); //false
+
+            bool result5 = Check("[](())[]"); //true
+
+        }
+
+        private bool Check(string s)
+        {
+            if (string.IsNullOrEmpty(s)) return true;
+
+            if (s.Length == 1) return false;
+
+            var first = s.First();
+            s = s.Substring(1, s.Length - 1);
+
+            if (first == '(')
+            {
+                //search the first ')' and remove it 
+                var i = 0;
+                foreach (var ch in s)
+                {
+                    if (ch == ')')
+                    {
+                        s = s.Remove(i, 1);
+                        break;
+                    }
+                    i++;
+                }
+            }
+
+            else if (first == '[')
+            {
+                //search the first ']' and remove it 
+                var i = 0;
+                foreach (var ch in s)
+                {
+                    if (ch == ']')
+                    {
+                        s = s.Remove(i, 1);
+                        break;
+                    }
+                    i++;
+                }
+            }
+
+            return Check(s);
+        }
+
+        private bool Check2(string s)
+        {
+            if (string.IsNullOrEmpty(s)) return true;
+
+            var first = s.First();
+            var last = s.Last();
+
+            if (first == '(' && last != ')') return false;
+            if (first == '[' && last != ']') return false;
+
+            s = s.Substring(1, s.Length - 2);
+            if (!string.IsNullOrEmpty(s))
+                return Check(s);
+            return true;
+        }
+
+        private void Question_24_25()
+        {
+            bool result = IsTwin("lookout", "outlook");
+            bool result1 = IsTwin("Hello", "world");
+            bool result2 = IsTwin("acb", "bca");
+            bool result3 = IsTwin("listen", "silent");
+
+            result = IsTwin2("lookout", "outlook");
+            result1 = IsTwin2("Hello", "world");
+            result2 = IsTwin2("acb", "bca");
+            result3 = IsTwin2("listen", "silent");
+
+        }
+
+        private bool IsTwin(string a, string b)
+        {
+            if (a.Length != b.Length) return false;
+
+            foreach (char letter in a)
+            {
+                if (!b.ToLowerInvariant().Contains(letter.ToString().ToLowerInvariant()))
+                    return false;
+            }
+            return true;
+
+            //return a.All(letter => b.ToLowerInvariant().Contains(letter.ToString().ToLowerInvariant()));
+
+        }
+
+        private bool IsTwin2(string a, string b)
+        {
+            if (a.Length != b.Length) return false;
+
+            var la = a.OrderBy(x => x.ToString().ToLower());
+            var lb = b.OrderBy(x => x.ToString().ToLower());
+
+            return la.SequenceEqual(lb);
+
+        }
+
+        struct Struct
+        {
+            public int foo;
+        }
+
+        public class ClassExample
+        {
+            public int foo;
+        }
+
+        private void Question_22_25()
+        {
+            //value
+            Struct struct1;
+            struct1.foo = 5;
+
+            Struct struct2 = struct1;
+            struct2.foo = 10;
+            var res = struct1.foo;//5
+
+
+            //reference
+            ClassExample class1 = new ClassExample();
+            class1.foo = 5;
+
+            ClassExample class2 = class1;
+            class2.foo = 10;
+            var res2 = class1.foo;//10
+
+
+
+        }
+
+        private void Question_8_25()
+        {
+            A.B b = new A.B();
+            //var result=b.
+
+            var y = A.toto;
+
+            throw new IndexOutOfRangeException();
+            throw new NullReferenceException();
+
+
 
         }
 
@@ -110,7 +280,7 @@ namespace CodingGame_Oussama
 
         private void Question_18(params string[] numbers)
         {
-            var res = numbers.Sum(x => float.Parse(x.Replace('.', ',')));//0.008999944
+            var res = numbers.Sum(x => float.Parse(x.Replace('.', ','))); //0.008999944
         }
 
         private bool Question_17(int i, int j)
@@ -127,15 +297,15 @@ namespace CodingGame_Oussama
 
             list.Remove("kiwi");
 
-            var res = query.Count();//0
-            var res2 = query2.Count();//1
+            var res = query.Count(); //0
+            var res2 = query2.Count(); //1
         }
 
         private void Question_15()
         {
             Shape s = new Square();
             Circle c = s as Circle; //null
-            Shape c2 = (Circle)s;//exception
+            Shape c2 = (Circle)s; //exception
 
         }
 
@@ -155,7 +325,7 @@ namespace CodingGame_Oussama
             sd[1] = 2;
 
 
-            var result = sd.Values;//213
+            var result = sd.Values; //213
 
         }
 
@@ -168,7 +338,7 @@ namespace CodingGame_Oussama
             m[o2] = 2;
 
             var result = m[o1];
-            MessageBox.Show(result.ToString());
+            MessageBox.Show(result.ToString());//2 et m.count =1 O1 et o2 pointent sur le meme object 
         }
 
         public class ImaginaryNumber
@@ -182,14 +352,17 @@ namespace CodingGame_Oussama
             CodingGame();
         }
 
-
+        private void button2_Click(object sender, EventArgs e)
+        {
+            var revision = new Revision();
+            revision.CodingGame();
+        }
     }
 
     public class Node
     {
         public Node left, right;
         public int value;
-        private int v;
 
         public Node(int v)
         {
@@ -219,6 +392,46 @@ namespace CodingGame_Oussama
             return res2;
         }
 
+
+
+        // Function to check the given key exist or not 
+        static bool iterativeSearch(Node root, int key)
+        {
+            // Traverse untill root reaches to dead end 
+            while (root != null)
+            {
+                // pass right subtree as new tree 
+                if (key > root.value)
+                    root = root.right;
+
+                // pass left subtree as new tree 
+                else if (key < root.value)
+                    root = root.left;
+                else
+                    return true; // if the key is found return 1 
+            }
+            return false;
+        }
+
+        public Node Find2(int key)  // the correct
+        {
+            // Traverse untill root reaches to dead end 
+            var root = this;
+            while (root != null)
+            {
+                // pass right subtree as new tree 
+                if (key > root.value)
+                    root = root.right;
+
+                // pass left subtree as new tree 
+                else if (key < root.value)
+                    root = root.left;
+                else
+                    return root; // if the key is found return 1 
+            }
+            return null;
+        }
+
         public bool Search(Node node, int key)
         {
             if (node == null)
@@ -231,12 +444,14 @@ namespace CodingGame_Oussama
             if (node.value > key)
                 return Search(node.left, key);
             return false;
-            
+
 
 
         }
+
         public Node Find(int key)
         {
+
             if (key == value)
                 return this;
 
@@ -259,11 +474,21 @@ namespace CodingGame_Oussama
         }
 
 
+
+
     }
 
-    internal class Shape { }
-    internal class Square : Shape { }
-    internal class Circle : Shape { }
+    internal class Shape
+    {
+    }
+
+    internal class Square : Shape
+    {
+    }
+
+    internal class Circle : Shape
+    {
+    }
 
     class Point
     {
@@ -283,4 +508,63 @@ namespace CodingGame_Oussama
         }
     }
 
+    public abstract class A
+    {
+        public string str = "foo";
+        private ArrayList err = null;
+        protected internal static string toto;
+
+        public class B
+        {
+        }
+
+        public virtual void Methode()
+        {
+
+        }
+
+        public abstract void Method2();
+    }
+
+    static class C
+    {
+    }
+
+    public class D : A
+    {
+        public override void Methode()
+        {
+            base.Methode();
+        }
+
+        public override void Method2()
+        {
+            var mock = new MockComposite<B>(new B());
+        }
+    }
+
+
+
+    class MockComposite<T> where T : A.B, new()
+    {
+        T _toTest;
+
+        public MockComposite()
+        {
+            _toTest = new T();
+        }
+        public MockComposite(T gen)
+        {
+            _toTest = new T();
+        }
+    }
 }
+
+
+
+
+
+
+
+
+
